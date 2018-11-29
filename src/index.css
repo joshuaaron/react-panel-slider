@@ -1,0 +1,39 @@
+@import url('https://fonts.googleapis.com/css?family=Mali:400,500');
+
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+}
+html,
+body {
+	height: 100%;
+	padding: 0;
+	margin: 0;
+}
+body {
+	text-align: center;
+	background: linear-gradient(45deg, #b066fe, #63e2ff);
+	color: #292929;
+	font-family: 'Mali', sans-serif;
+}
+.app {
+	display: grid;
+	grid-template: auto / 1fr;
+	padding: 20px;
+}
+button {
+	margin: 4px;
+	padding: 8px 12px;
+	border: none;
+	border-radius: 3px;
+	text-transform: uppercase;
+	background: linear-gradient(45deg, #2f80ed, #56ccf2);
+	font-family: inherit;
+	color: white;
+	cursor: pointer;
+}
+
+h3 {
+	margin: 0 0 16px;
+}

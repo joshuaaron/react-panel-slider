@@ -1,0 +1,273 @@
+
+.panel {
+	padding: 8px 16px;
+}
+
+.panel-container {
+	background: #f1f1f1;
+	width: 75%;
+	margin: 0 auto;
+	border: 0;
+	padding: 16px;
+	grid-gap: 16px;
+	box-shadow: 0 3px 5px 1px rgba(55, 55, 55, 0.25);
+}
+
+/* Animation Classes */
+.fromRight {
+	animation: fromRight 0.5s ease-out;
+}
+
+@keyframes fromRight {
+	from {
+		transform: translate3d(100%, 0, 0);
+	}
+}
+.toRight {
+	animation: toRight 0.5s ease-out;
+}
+
+@keyframes toRight {
+	to {
+		transform: translate3d(100%, 0, 0);
+	}
+}
+.fromLeft {
+	animation: fromLeft 0.5s ease-out;
+}
+
+@keyframes fromLeft {
+	from {
+		transform: translate3d(-100%, 0, 0);
+	}
+}
+.toLeft {
+	animation: toLeft 0.5s ease-out;
+}
+
+@keyframes toLeft {
+	to {
+		transform: translate3d(-100%, 0, 0);
+	}
+}
+.fromTop {
+	animation: fromTop 0.5s ease-out;
+}
+
+@keyframes fromTop {
+	from {
+		transform: translate3d(0, -100%, 0);
+	}
+}
+.toTop {
+	animation: toTop 0.5s ease-out;
+}
+
+@keyframes toTop {
+	to {
+		transform: translate3d(0, -100%, 0);
+	}
+}
+.fromBottom {
+	animation: fromBottom 0.5s ease-out;
+}
+
+@keyframes fromBottom {
+	from {
+		transform: translate3d(0, 100%, 0);
+	}
+}
+.toBottom {
+	animation: toBottom 0.5s ease-out;
+}
+
+@keyframes toBottom {
+	to {
+		transform: translate3d(0, 100%, 0);
+	}
+}
+.fromRightFade {
+	animation: fromRightFade 0.5s ease-out;
+}
+
+@keyframes fromRightFade {
+	from {
+		opacity: 0.2;
+		transform: translate3d(100%, 0, 0);
+	}
+}
+.toRightFade {
+	animation: toRightFade 0.5s ease-out;
+}
+
+@keyframes toRightFade {
+	to {
+		opacity: 0.2;
+		transform: translate3d(100%, 0, 0);
+	}
+}
+.fromLeftFade {
+	animation: fromLeftFade 0.5s ease-out;
+}
+
+@keyframes fromLeftFade {
+	from {
+		opacity: 0.2;
+		transform: translate3d(-100%, 0, 0);
+	}
+}
+.toLeftFade {
+	animation: toLeftFade 0.5s ease-out;
+}
+
+@keyframes toLeftFade {
+	to {
+		opacity: 0.2;
+		transform: translate3d(-100%, 0, 0);
+	}
+}
+.fromTopFade {
+	animation: fromTopFade 0.5s ease-out;
+}
+
+@keyframes fromTopFade {
+	from {
+		opacity: 0.2;
+		transform: translate3d(0, -100%, 0);
+	}
+}
+.toTopFade {
+	animation: toTopFade 0.5s ease-out;
+}
+
+@keyframes toTopFade {
+	to {
+		opacity: 0.2;
+		transform: translate3d(0, -100%, 0);
+	}
+}
+.fromBottomFade {
+	animation: fromBottomFade 0.5s ease-out;
+}
+
+@keyframes fromBottomFade {
+	from {
+		opacity: 0.2;
+		transform: translate3d(0, 100%, 0);
+	}
+}
+.toBottomFade {
+	animation: toBottomFade 0.5s ease-out;
+}
+
+@keyframes toBottomFade {
+	to {
+		opacity: 0.2;
+		transform: translate3d(0, 100%, 0);
+	}
+}
+
+.toLeftEasing {
+	animation: toLeftFade 0.5s ease-in-out both;
+}
+.toRightEasing {
+	animation: toRightFade 0.5s ease-in-out both;
+}
+.toTopEasing {
+	animation: toTopFade 0.5s ease-in-out both;
+}
+.toBottomEasing {
+	animation: toBottomFade 0.5s ease-in-out both;
+}
+
+/* Scales */
+.scaleDown {
+	animation: scaleDown 0.5s ease both;
+}
+@keyframes scaleDown {
+	from {
+	}
+	to {
+		opacity: 0;
+		transform: scale(0.8);
+	}
+}
+.scaleUp {
+	animation: scaleUp 0.5s ease both;
+}
+@keyframes scaleUp {
+	from {
+		opacity: 0;
+		transform: scale(0.8);
+	}
+}
+
+.cubeLeftOut {
+	transform-origin: 100% 50%;
+	animation: cubeLeftOut 0.5s ease-in both;
+}
+@keyframes cubeLeftOut {
+	0% {
+	}
+	50% {
+		animation-timing-function: ease-out;
+		transform: translateX(-50%) translateZ(-200px) rotateY(-45deg);
+	}
+	100% {
+		opacity: 0.3;
+		transform: translateX(-100%) rotateY(-90deg);
+	}
+}
+.cubeLeftIn {
+	transform-origin: 0% 50%;
+	animation: cubeLeftIn 0.5s ease-in both;
+}
+@keyframes cubeLeftIn {
+	0% {
+		opacity: 0.3;
+		transform: translateX(100%) rotateY(90deg);
+	}
+	50% {
+		animation-timing-function: ease-out;
+		transform: translateX(50%) translateZ(-200px) rotateY(45deg);
+	}
+}
+.cubeRightOut {
+	transform-origin: 0% 50%;
+	animation: cubeRightOut 0.5s ease-in both;
+}
+@keyframes cubeRightOut {
+	0% {
+	}
+	50% {
+		animation-timing-function: ease-out;
+		transform: translateX(50%) translateZ(-200px) rotateY(45deg);
+	}
+	100% {
+		opacity: 0.3;
+		transform: translateX(100%) rotateY(90deg);
+	}
+}
+
+.cubeRightIn {
+	transform-origin: 100% 50%;
+	animation: cubeRightIn 0.5s ease-in both;
+}
+@keyframes cubeRightIn {
+	0% {
+		opacity: 0.3;
+		transform: translateX(-100%) rotateY(-90deg);
+	}
+	50% {
+		animation-timing-function: ease-out;
+		transform: translateX(-50%) translateZ(-200px) rotateY(-45deg);
+	}
+}
+
+.isActive {
+	visibility: visible !important;
+}
+
+.onTop {
+	z-index: 999;
+}
