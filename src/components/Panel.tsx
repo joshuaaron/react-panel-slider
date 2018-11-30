@@ -3,12 +3,12 @@ import { pipe } from '../utils/helpers';
 import { AnimationKeys, animations } from '../utils/animations';
 
 type Props = {
-	slideIndex: number;
+	panelIndex: number;
 	activeIndex: number;
 	prevActiveIndex: number;
 	isAnimating: boolean;
 	animationType?: animationTypes;
-	slideClassname?: string | string[];
+	panelClassname?: string | string[];
 	gridAreaValue?: string;
 	handleAnimationEnd(): void;
 } & typeof defaultProps;
@@ -18,7 +18,7 @@ const defaultProps = {
 		nextAnimation: AnimationKeys.FROM_RIGHT,
 		prevAnimation: AnimationKeys.FROM_LEFT
 	},
-	gridAreaValue: 'slide'
+	gridAreaValue: 'panel'
 	// onAnimationEnd: () => {}
 };
 
@@ -29,19 +29,19 @@ export type animationTypes = {
 
 export class Panel extends React.Component<Props, {}> {
 	static readonly defaultProps = defaultProps;
-	slide: HTMLDivElement;
+	panel: React.RefObject<HTMLDivElement> = React.createRef();
 
 	render() {
 		const {
 			activeIndex,
-			slideIndex,
-			slideClassname,
+			panelIndex,
+			panelClassname,
 			gridAreaValue,
 			children
 		} = this.props;
-		const isActive = activeIndex === slideIndex;
+		const isActive = activeIndex === panelIndex;
 
-		const slideStyles: React.CSSProperties = {
+		const panelStyles: React.CSSProperties = {
 			gridArea: gridAreaValue,
 			overflow: 'hidden',
 			visibility: 'hidden',
@@ -52,17 +52,17 @@ export class Panel extends React.Component<Props, {}> {
 		};
 
 		// Assign prop, animation and direction classnames.
-		const slideClassNames: string = pipe(
+		const panelClassNames: string = pipe(
 			this.assignPropClassnames,
 			this.assignAnimationClassnames
-		)(slideClassname).join(' ');
+		)(panelClassname).join(' ');
 
 		return (
 			<div
-				style={slideStyles}
-				className={slideClassNames.length ? slideClassNames : undefined}
+				style={panelStyles}
+				className={panelClassNames.length ? panelClassNames : undefined}
 				onAnimationEnd={this.handleAnimationEnd}
-				ref={el => (this.slide = el as HTMLDivElement)}
+				ref={this.panel}
 			>
 				{children}
 			</div>
@@ -70,65 +70,63 @@ export class Panel extends React.Component<Props, {}> {
 	}
 
 	// Assign any classnames passed as props.
-	assignPropClassnames = (slideClassname: string | string[]) => {
+	assignPropClassnames = (panelClassname: string | string[]) => {
 		let classes: string[] = [];
-		if (slideClassname) {
+		if (panelClassname) {
 			// handle array of classes
-			if (Array.isArray(slideClassname)) {
-				classes = [...slideClassname];
+			if (Array.isArray(panelClassname)) {
+				classes = [...panelClassname];
 			} else {
-				classes.push(slideClassname);
+				classes.push(panelClassname);
 			}
 		}
 
 		return classes;
 	};
 
-	// Assign relavant animation classes based on slide direction
+	// Assign relavant animation classes based on panel animation direction
 	// and which animation is applied for both prev and next actions
-	assignAnimationClassnames = (classes: string[]) => {
-		const { activeIndex, prevActiveIndex, slideIndex } = this.props;
+	assignAnimationClassnames = (classes: string[]): string[] => {
+		const { activeIndex, prevActiveIndex, panelIndex } = this.props;
 
-		const isExitingSlide = slideIndex === prevActiveIndex;
-		const isEnteringSlide = slideIndex === activeIndex;
-		const directionalClass = this.getDirectionalClassname(isEnteringSlide);
+		const isExitingPanel = panelIndex === prevActiveIndex;
+		const isEnteringPanel = panelIndex === activeIndex;
+		const directionalClass = this.getDirectionalClassname(isEnteringPanel);
 
 		let animationClasses: string[] = [];
 		if (this.props.isAnimating) {
-			if (isExitingSlide) {
-				animationClasses = [...classes, 'isActive', ...directionalClass];
-			} else if (isEnteringSlide) {
-				animationClasses = [...classes, 'isActive', ...directionalClass];
+			if (isExitingPanel) {
+				animationClasses = [...classes, ...directionalClass, 'isActive'];
 			}
-		} else if (isEnteringSlide) {
+			else if (isEnteringPanel) {
+				animationClasses = [...classes, ...directionalClass, 'isActive'];
+			}
+		}
+		else if (isEnteringPanel) {
 			animationClasses = [...classes, 'isActive'];
-		} else {
+		}
+		else {
 			return classes;
 		}
 
 		return animationClasses;
 	};
 
-	getDirectionalClassname = (isEnteringSlide: boolean) => {
+	getDirectionalClassname = (isEnteringPanel: boolean) => {
 		const { activeIndex, prevActiveIndex } = this.props;
+
 		const isAnimatingForward = activeIndex > prevActiveIndex ? true : false;
+		const { enteringClass, exitingClass } = this.getAnimationType(isAnimatingForward);
 
-		const { enteringClass, exitingClass } = this.getAnimationType(
-			isAnimatingForward
-		);
-
-		if (isEnteringSlide) {
-			return enteringClass;
-		} else {
-			return exitingClass;
-		}
+		// Based on animation direction, return the corresponding animation class;
+		return isEnteringPanel ? enteringClass : exitingClass;
 	};
 
 	// Retrieve the correct enter and exiting class names from animation object
 	getAnimationType = (isAnimatingForward: boolean) => {
 		const { nextAnimation, prevAnimation } = this.props.animationType;
 
-		// Get Animation key based on if prev or next slide is called
+		// Get Animation key based on if prev or next panel is called
 		const animationKey = isAnimatingForward ? nextAnimation : prevAnimation;
 		// Once we have the key -> get the containing object for that key and retrieve classnames
 		const animationObj: any = animations.find((arr: any) => arr[animationKey]);
@@ -140,25 +138,25 @@ export class Panel extends React.Component<Props, {}> {
 		};
 	};
 
-	// Handle resetting of slides and any callback on animEnd
-	handleAnimationEnd = (e: React.AnimationEvent<HTMLDivElement>) => {
+	// Handle resetting of panels and any callback on animEnd
+	handleAnimationEnd = (e: React.AnimationEvent<HTMLDivElement>): void => {
 		const { handleAnimationEnd } = this.props;
-		if (e && e.target !== this.slide) return;
+		if (e && e.target !== this.panel.current) return;
 
-		this.resetSlides();
+		this.resetPanels();
 		if (handleAnimationEnd) {
 			handleAnimationEnd();
 		}
 	};
 
 	// Need to find better way to handle reset?? (too implicit?)
-	resetSlides = () => {
-		const { prevActiveIndex, slideIndex } = this.props;
-		const wasPreviousActive = prevActiveIndex === slideIndex;
+	resetPanels = (): void => {
+		const { prevActiveIndex, panelIndex } = this.props;
+		const panelNode = this.panel.current as HTMLDivElement;
 
-		if (wasPreviousActive) {
-			if (this.slide.classList.contains('isActive')) {
-				this.slide.classList.remove('isActive');
+		if (prevActiveIndex === panelIndex && panelNode) {
+			if (panelNode.classList.contains('isActive')) {
+				panelNode.classList.remove('isActive');
 			}
 		}
 	};

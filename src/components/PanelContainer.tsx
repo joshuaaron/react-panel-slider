@@ -3,8 +3,8 @@ import { isFunction } from '../utils/helpers';
 
 // Declare props & state types
 type Props = {
-	slideTotal: number;
-	gridProperties?: keyof GridProperties;
+	panelTotal: number;
+	gridProperties?: GridProperties;
 	children?: RenderCallback;
 	render?: RenderCallback;
 } & typeof defaultProps;
@@ -33,8 +33,8 @@ export type RenderProps = {
 	activeIndex: State['activeIndex'];
 	prevActiveIndex: State['prevActiveIndex'];
 	isAnimating: State['isAnimating'];
-	prevSlide: PanelContainer['onPrevSlide'];
-	nextSlide: PanelContainer['onNextSlide'];
+	prevPanel: PanelContainer['onPrevPanel'];
+	nextPanel: PanelContainer['onNextPanel'];
 	handleAnimationEnd: PanelContainer['handleAnimationEnd'];
 };
 
@@ -43,13 +43,13 @@ export class PanelContainer extends React.Component<Props, State> {
 	static readonly defaultProps = defaultProps;
 
 	// ref for container node
-	container: HTMLDivElement;
+	container: React.RefObject<HTMLDivElement> = React.createRef();
 
 	shouldComponentUpdate(nextProps: Props, nextState: State) {
 		return (
 			nextState.activeIndex !== this.state.activeIndex ||
 			nextState.isAnimating !== this.state.isAnimating ||
-			nextProps.slideTotal !== this.props.slideTotal
+			nextProps.panelTotal !== this.props.panelTotal
 		);
 	}
 
@@ -62,8 +62,8 @@ export class PanelContainer extends React.Component<Props, State> {
 			prevActiveIndex,
 			isAnimating,
 			handleAnimationEnd: this.handleAnimationEnd,
-			prevSlide: this.onPrevSlide,
-			nextSlide: this.onNextSlide
+			prevPanel: this.onPrevPanel,
+			nextPanel: this.onNextPanel
 		};
 
 		const defaultStyles: React.CSSProperties = {
@@ -83,7 +83,7 @@ export class PanelContainer extends React.Component<Props, State> {
 			<div
 				style={finalStyles}
 				className="panel-container"
-				ref={el => (this.container = el as HTMLDivElement)}
+				ref={this.container}
 			>
 				{render
 					? render(renderProps)
@@ -114,15 +114,17 @@ export class PanelContainer extends React.Component<Props, State> {
 		return obj;
 	};
 
-	onPrevSlide = (): void => {
-		if (this.state.isAnimating || this.props.slideTotal < 2) {
+	// handle animating to previous panel
+	onPrevPanel = (): void => {
+		if (this.state.isAnimating || this.props.panelTotal < 2) {
 			return;
 		}
 
 		this.setState(prevState => {
 			if (prevState.activeIndex === 0) {
 				return prevState;
-			} else {
+			}
+			else {
 				return {
 					...prevState,
 					isAnimating: true,
@@ -133,14 +135,14 @@ export class PanelContainer extends React.Component<Props, State> {
 		});
 	};
 
-	// handle next slide
-	onNextSlide = (): void => {
-		if (this.state.isAnimating || this.props.slideTotal < 2) {
+	// handle animating to next panel
+	onNextPanel = (): void => {
+		if (this.state.isAnimating || this.props.panelTotal < 2) {
 			return;
 		}
 
 		this.setState(prevState => {
-			if (prevState.activeIndex === this.props.slideTotal - 1) {
+			if (prevState.activeIndex === this.props.panelTotal - 1) {
 				return prevState;
 			} else {
 				return {

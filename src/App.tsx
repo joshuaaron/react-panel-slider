@@ -11,26 +11,26 @@ const animationType: animationTypes = {
 	prevAnimation: AnimationKeys.CUBE_TO_RIGHT
 };
 
-// Change the order of these or nest controls in slide if desired and remove this prop entirely
+// Change the order of these or nest controls in panel if desired and remove this prop entirely
 // FIX THIS ANY TYPING
 const gridProps: any = {
-	templateArea: ['slide', 'controls']
+	templateArea: ['panel', 'controls']
 }
 
 // PanelContainer allows render={(args =>)} or child as function
 const App = () => (
 	<div className="app">
 		<PanelContainer
-			slideTotal={3}
+			panelTotal={3}
 			gridProperties={gridProps}
-			render={({ prevSlide, nextSlide, ...props }: RenderProps) => (
+			render={({ prevPanel, nextPanel, ...props }: RenderProps) => (
 				<React.Fragment>
 					{items.map((item: demoItem, index: number) => (
 						<Panel
 							key={item.title}
-							slideIndex={index}
+							panelIndex={index}
 							animationType={animationType}
-							slideClassname="panel"
+							panelClassname="panel"
 							{...props}
 						>
 							<React.Fragment>
@@ -40,8 +40,8 @@ const App = () => (
 						</Panel>
 					))}
 					<PanelControls>
-						<button onClick={prevSlide}>Prev</button>
-						<button onClick={nextSlide}>Next</button>
+						<button onClick={prevPanel}>Prev</button>
+						<button onClick={nextPanel}>Next</button>
 					</PanelControls>
 				</React.Fragment>
 			)}
