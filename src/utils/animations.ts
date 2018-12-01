@@ -22,10 +22,10 @@ export enum AnimationKeys {
 }
 
 // fix
-export type animationData = [{[key in AnimationKeys]: { enteringClass: string[], exitingClass: string[]}}];
+export type animationData = {[key in AnimationKeys]?: { enteringClass: string[], exitingClass: string[]}};
 export const animations = [
 	{
-		fromRight: {
+		[AnimationKeys.FROM_RIGHT]: {
 			enteringClass: ['fromRight'],
 			exitingClass: ['toLeft']
 		}

@@ -4,20 +4,13 @@ import { isFunction } from '../utils/helpers';
 // Declare props & state types
 type Props = {
 	panelTotal: number;
-	gridProperties?: GridProperties;
 	children?: RenderCallback;
 	render?: RenderCallback;
 } & typeof defaultProps;
 
-export type GridProperties = {
-	columnSizes?: string;
-	rowSizes?: string;
-	templateArea?: string[];
-};
+type RenderCallback = (args: ConsumerProps) => React.ReactNode;
+type State = Readonly<typeof initialState>;
 
-type State = typeof initialState;
-
-// Declare default props/initial state
 const defaultProps = {
 	gridProperties: { columnSizes: '1fr', rowSizes: 'auto', templateArea: [''] }
 };
@@ -25,11 +18,16 @@ const defaultProps = {
 const initialState = {
 	prevActiveIndex: 0,
 	activeIndex: 0,
-	isAnimating: false
+	isAnimating: false,
 };
 
-type RenderCallback = (args: RenderProps) => JSX.Element;
-export type RenderProps = {
+export type GridProperties = {
+	columnSizes: string;
+	rowSizes: string;
+	templateArea: string[];
+};
+
+export type ConsumerProps = {
 	activeIndex: State['activeIndex'];
 	prevActiveIndex: State['prevActiveIndex'];
 	isAnimating: State['isAnimating'];
@@ -39,10 +37,9 @@ export type RenderProps = {
 };
 
 export class PanelContainer extends React.Component<Props, State> {
-	readonly state = initialState;
 	static readonly defaultProps = defaultProps;
+	state = initialState;
 
-	// ref for container node
 	container: React.RefObject<HTMLDivElement> = React.createRef();
 
 	shouldComponentUpdate(nextProps: Props, nextState: State) {
@@ -57,13 +54,13 @@ export class PanelContainer extends React.Component<Props, State> {
 		const { children, render } = this.props;
 		const { activeIndex, prevActiveIndex, isAnimating } = this.state;
 
-		const renderProps: RenderProps = {
+		const renderProps: ConsumerProps = {
 			activeIndex,
 			prevActiveIndex,
 			isAnimating,
 			handleAnimationEnd: this.handleAnimationEnd,
 			prevPanel: this.onPrevPanel,
-			nextPanel: this.onNextPanel
+			nextPanel: this.onNextPanel,
 		};
 
 		const defaultStyles: React.CSSProperties = {
@@ -89,7 +86,7 @@ export class PanelContainer extends React.Component<Props, State> {
 					? render(renderProps)
 					: isFunction(children)
 						? children(renderProps)
-						: null}
+						: this.throwRenderError()}
 			</div>
 		);
 	}
@@ -155,9 +152,15 @@ export class PanelContainer extends React.Component<Props, State> {
 		});
 	};
 
+	/** Set isAnimating to false once slides have finished animating */
 	handleAnimationEnd = (): void => {
 		this.setState({
 			isAnimating: false
 		});
 	};
+
+	/** Throw an error if neither children or render prop are provided as functions */
+	throwRenderError = (): Error => {
+		throw new Error('You must provide either children or the render prop. Both need to be of type Function.')
+	}
 }

@@ -19,7 +19,6 @@ const defaultProps = {
 		prevAnimation: AnimationKeys.FROM_LEFT
 	},
 	gridAreaValue: 'panel'
-	// onAnimationEnd: () => {}
 };
 
 export type animationTypes = {
@@ -129,7 +128,7 @@ export class Panel extends React.Component<Props, {}> {
 		// Get Animation key based on if prev or next panel is called
 		const animationKey = isAnimatingForward ? nextAnimation : prevAnimation;
 		// Once we have the key -> get the containing object for that key and retrieve classnames
-		const animationObj: any = animations.find((arr: any) => arr[animationKey]);
+		const animationObj: any = animations.find((obj: any) => obj[animationKey]);
 		const { enteringClass, exitingClass } = animationObj[animationKey] as any;
 
 		return {

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Panel, animationTypes } from './components/Panel'
-import { PanelContainer, RenderProps } from './components/PanelContainer';
+import { PanelContainer, ConsumerProps, GridProperties } from './components/PanelContainer';
 import { AnimationKeys } from './utils/animations';
 import { PanelControls } from './components/ControlWrapper';
 import './App.css';
@@ -11,19 +11,19 @@ const animationType: animationTypes = {
 	prevAnimation: AnimationKeys.CUBE_TO_RIGHT
 };
 
-// Change the order of these or nest controls in panel if desired and remove this prop entirely
-// FIX THIS ANY TYPING
-const gridProps: any = {
+const gridProps: GridProperties = {
+	columnSizes: '1fr',
+	rowSizes: 'auto',
 	templateArea: ['panel', 'controls']
 }
 
-// PanelContainer allows render={(args =>)} or child as function
+// PanelContainer allows render={(args =>)} or children as function
 const App = () => (
 	<div className="app">
 		<PanelContainer
 			panelTotal={3}
 			gridProperties={gridProps}
-			render={({ prevPanel, nextPanel, ...props }: RenderProps) => (
+			render={({ prevPanel, nextPanel, ...props }: ConsumerProps) => (
 				<React.Fragment>
 					{items.map((item: demoItem, index: number) => (
 						<Panel
