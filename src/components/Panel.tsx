@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { pipe } from '../utils/helpers';
-import { AnimationKeys, animations } from '../utils/animations';
+import { AnimationKeys, animations, AnimationData, AnimationOptions } from '../utils/animations';
 
 type Props = {
 	panelIndex: number;
@@ -122,18 +122,30 @@ export class Panel extends React.Component<Props, {}> {
 	};
 
 	// Retrieve the correct enter and exiting class names from animation object
+	// Get Animation key based on if prev or next panel is called
+	// Once we have the key -> get the containing object for that key and retrieve classnames
 	getAnimationType = (isAnimatingForward: boolean) => {
 		const { nextAnimation, prevAnimation } = this.props.animationType;
 
-		// Get Animation key based on if prev or next panel is called
 		const animationKey = isAnimatingForward ? nextAnimation : prevAnimation;
-		// Once we have the key -> get the containing object for that key and retrieve classnames
-		const animationObj: any = animations.find((obj: any) => obj[animationKey]);
-		const { enteringClass, exitingClass } = animationObj[animationKey] as any;
+		const animationObj = animations.find((obj: AnimationData) => !!obj[animationKey]);
 
+		// undefined checked
+		if (animationObj) {
+			const classesObject = animationObj[animationKey];
+			if (classesObject) {
+				const { enteringClass, exitingClass }: AnimationOptions = classesObject;
+				return {
+					enteringClass,
+					exitingClass,
+				}
+			}
+		}
+
+		// Fallback incase of class retrieval fail
 		return {
-			enteringClass,
-			exitingClass
+			enteringClass: [''],
+			exitingClass: [''],
 		};
 	};
 

@@ -1,4 +1,5 @@
-export enum AnimationKeys {
+// To use this as a key index, it must be "const"!
+export const enum AnimationKeys {
 	FROM_RIGHT = 'fromRight',
 	FROM_LEFT = 'fromLeft',
 	FROM_BOTTOM = 'fromBottom',
@@ -21,9 +22,20 @@ export enum AnimationKeys {
 	// CUBE_TO_BOTTOM = 'cubeToBottom' -- not complete
 }
 
-// fix
-export type animationData = {[key in AnimationKeys]?: { enteringClass: string[], exitingClass: string[]}};
-export const animations = [
+export type AnimationOptions = {
+	enteringClass: string[];
+	exitingClass: string[];
+}
+
+// REFACTOR NOTES:
+// to require a single key, look into Pick<T, Exclude<keyof T, K>> in the documentation:
+// https://www.typescriptlang.org/docs/handbook/release-notes/typescript-2-8.html
+export type AnimationData = {
+	// Have to say that the key is ?-optional or else your objects will expect ALL of the directions
+	[key in AnimationKeys]?: AnimationOptions
+}
+
+export const animations: AnimationData[] = [
 	{
 		[AnimationKeys.FROM_RIGHT]: {
 			enteringClass: ['fromRight'],
@@ -31,117 +43,117 @@ export const animations = [
 		}
 	},
 	{
-		fromLeft: {
+		[AnimationKeys.FROM_LEFT]: {
 			enteringClass: ['fromLeft'],
 			exitingClass: ['toRight']
 		}
 	},
 	{
-		fromBottom: {
+		[AnimationKeys.FROM_BOTTOM]: {
 			enteringClass: ['fromBottom'],
 			exitingClass: ['toTop']
 		}
 	},
 	{
-		fromTop: {
+		[AnimationKeys.FROM_TOP]: {
 			enteringClass: ['fromTop'],
 			exitingClass: ['toBottom']
 		}
 	},
 	{
-		fromRightFade: {
+		[AnimationKeys.FROM_RIGHT_FADE]: {
 			enteringClass: ['fromRightFade'],
 			exitingClass: ['toLeftFade']
 		}
 	},
 	{
-		fromLeftFade: {
+		[AnimationKeys.FROM_LEFT_FADE]: {
 			enteringClass: ['fromLeftFade'],
 			exitingClass: ['toRightFade']
 		}
 	},
 	{
-		fromBottomFade: {
+		[AnimationKeys.FROM_BOTTOM_FADE]: {
 			enteringClass: ['fromBottomFade'],
 			exitingClass: ['toTopFade']
 		}
 	},
 	{
-		fromTopFade: {
+		[AnimationKeys.FROM_TOP_FADE]: {
 			enteringClass: ['fromTopFade'],
 			exitingClass: ['toBottomFade']
 		}
 	},
 	{
-		toLeftEasing: {
+		[AnimationKeys.TO_LEFT_EASING]: {
 			enteringClass: ['fromRight'],
 			exitingClass: ['toLeftEasing', 'onTop']
 		}
 	},
 	{
-		toRightEasing: {
+		[AnimationKeys.TO_RIGHT_EASING]: {
 			enteringClass: ['fromLeft'],
 			exitingClass: ['toRightEasing', 'onTop']
 		}
 	},
 	{
-		toTopEasing: {
+		[AnimationKeys.TO_TOP_EASING]: {
 			enteringClass: ['fromBottom'],
 			exitingClass: ['toTopEasing', 'onTop']
 		}
 	},
 	{
-		toBottomEasing: {
+		[AnimationKeys.TO_BOTTOM_EASING]: {
 			enteringClass: ['fromTop'],
 			exitingClass: ['toBottomEasing', 'onTop']
 		}
 	},
 	{
-		scaleDownFromRight: {
+		[AnimationKeys.SCALE_DOWN_FROM_RIGHT]: {
 			enteringClass: ['fromRight', 'onTop'],
 			exitingClass: ['scaleDown']
 		}
 	},
 	{
-		scaleDownFromLeft: {
+		[AnimationKeys.SCALE_DOWN_FROM_LEFT]: {
 			enteringClass: ['fromLeft', 'onTop'],
 			exitingClass: ['scaleDown']
 		}
 	},
 	{
-		scaleDownFromTop: {
+		[AnimationKeys.SCALE_DOWN_FROM_TOP]: {
 			exitingClass: ['scaleDown'],
 			enteringClass: ['fromTop', 'onTop']
 		}
 	},
 	{
-		scaleDownFromBottom: {
+		[AnimationKeys.SCALE_DOWN_FROM_BOTTOM]: {
 			exitingClass: ['scaleDown'],
 			enteringClass: ['fromBottom', 'onTop']
 		}
 	},
 	{
-		cubeToLeft: {
+		[AnimationKeys.CUBE_TO_LEFT]: {
 			enteringClass: ['cubeLeftIn'],
 			exitingClass: ['cubeLeftOut', 'onTop']
 		}
 	},
 	{
-		cubeToRight: {
+		[AnimationKeys.CUBE_TO_RIGHT]: {
 			enteringClass: ['cubeRightIn'],
 			exitingClass: ['cubeRightOut', 'onTop']
 		}
 	},
-	{
-		cubeToTop: {
-			enteringClass: ['cubeTopIn'],
-			exitingClass: ['cubeTopOut', 'onTop']
-		}
-	},
-	{
-		cubeToBottom: {
-			enteringClass: ['cubeBottomIn'],
-			exitingClass: ['cubeBottomOut', 'onTop']
-		}
-	}
+	// {
+	// 	cubeToTop: {
+	// 		enteringClass: ['cubeTopIn'],
+	// 		exitingClass: ['cubeTopOut', 'onTop']
+	// 	}
+	// },
+	// {
+	// 	cubeToBottom: {
+	// 		enteringClass: ['cubeBottomIn'],
+	// 		exitingClass: ['cubeBottomOut', 'onTop']
+	// 	}
+	// }
 ];
