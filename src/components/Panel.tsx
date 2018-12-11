@@ -94,10 +94,7 @@ export class Panel extends React.Component<Props, {}> {
 
 		let animationClasses: string[] = [];
 		if (this.props.isAnimating) {
-			if (isExitingPanel) {
-				animationClasses = [...classes, ...directionalClass, 'isActive'];
-			}
-			else if (isEnteringPanel) {
+			if (isEnteringPanel || isExitingPanel) {
 				animationClasses = [...classes, ...directionalClass, 'isActive'];
 			}
 		}
@@ -133,6 +130,7 @@ export class Panel extends React.Component<Props, {}> {
 		// undefined checked
 		if (animationObj) {
 			const classesObject = animationObj[animationKey];
+
 			if (classesObject) {
 				const { enteringClass, exitingClass }: AnimationOptions = classesObject;
 				return {
