@@ -12,7 +12,7 @@ type RenderCallback = (args: ConsumerProps) => React.ReactNode;
 type State = Readonly<typeof initialState>;
 
 const defaultProps = {
-	gridProperties: { columnSizes: '1fr', rowSizes: 'auto', templateArea: [''] }
+	gridProperties: { columnSizes: '1fr', rowSizes: 'auto', templateArea: [''] } as GridProperties
 };
 
 const initialState = {

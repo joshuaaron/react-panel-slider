@@ -7,9 +7,7 @@ type Props = {
 	activeIndex: number;
 	prevActiveIndex: number;
 	isAnimating: boolean;
-	animationType?: animationTypes;
 	panelClassname?: string | string[];
-	gridAreaValue?: string;
 	handleAnimationEnd(): void;
 } & typeof defaultProps;
 
@@ -17,8 +15,8 @@ const defaultProps = {
 	animationType: {
 		nextAnimation: AnimationKeys.FROM_RIGHT,
 		prevAnimation: AnimationKeys.FROM_LEFT
-	},
-	gridAreaValue: 'panel'
+	} as animationTypes,
+	gridAreaValue: 'panel' as string
 };
 
 export type animationTypes = {
