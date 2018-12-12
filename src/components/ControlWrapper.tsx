@@ -5,7 +5,7 @@ import * as React from 'react';
 type Props = {
 	gridAreaValue?: string,
 }
-const PanelControls: React.SFC<Props> = ({
+const ControlWrapper: React.SFC<Props> = ({
 	gridAreaValue = 'controls',
 	children
 }): React.ReactElement<any> => {
@@ -16,4 +16,4 @@ const PanelControls: React.SFC<Props> = ({
 	return <div style={propStyles}>{children}</div>;
 }
 
-export { PanelControls };
+export { ControlWrapper };

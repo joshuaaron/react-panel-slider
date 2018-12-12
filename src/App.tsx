@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Panel, animationTypes } from './components/Panel'
 import { PanelContainer, ConsumerProps, GridProperties } from './components/PanelContainer';
 import { AnimationKeys } from './utils/animations';
-import { PanelControls } from './components/ControlWrapper';
+import { ControlWrapper } from './components/ControlWrapper';
 import './App.css';
 
 // Change these with any keys from animationTypes:
@@ -39,10 +39,10 @@ const App = () => (
 							</React.Fragment>
 						</Panel>
 					))}
-					<PanelControls>
+					<ControlWrapper>
 						<button onClick={prevPanel}>Prev</button>
 						<button onClick={nextPanel}>Next</button>
-					</PanelControls>
+					</ControlWrapper>
 				</React.Fragment>
 			)}
 		/>
