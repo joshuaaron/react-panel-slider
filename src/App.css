@@ -1,3 +1,8 @@
+.app {
+	display: grid;
+	grid-template: auto / 1fr;
+	padding: 20px;
+}
 
 .panel {
 	padding: 8px 16px;

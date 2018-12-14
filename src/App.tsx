@@ -20,11 +20,9 @@ const gridProps: GridProperties = {
 // PanelContainer allows render={(args =>)} or children as function
 const App = () => (
 	<div className="app">
-		<PanelContainer
-			panelTotal={3}
-			gridProperties={gridProps}
-			render={({ prevPanel, nextPanel, ...props }: ConsumerProps) => (
-				<React.Fragment>
+		<PanelContainer panelTotal={3} gridProperties={gridProps}>
+			{({ prevPanel, nextPanel, ...props }: ConsumerProps) => (
+				<>
 					{items.map((item: demoItem, index: number) => (
 						<Panel
 							key={item.title}
@@ -33,19 +31,19 @@ const App = () => (
 							panelClassname="panel"
 							{...props}
 						>
-							<React.Fragment>
+							<>
 								<h3>{item.title}</h3>
 								<div>{item.content}</div>
-							</React.Fragment>
+							</>
 						</Panel>
 					))}
 					<ControlWrapper>
 						<button onClick={prevPanel}>Prev</button>
 						<button onClick={nextPanel}>Next</button>
 					</ControlWrapper>
-				</React.Fragment>
+				</>
 			)}
-		/>
+		</PanelContainer>
 	</div>
 );
 

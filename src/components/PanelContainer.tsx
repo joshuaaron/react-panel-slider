@@ -63,6 +63,7 @@ export class PanelContainer extends React.Component<Props, State> {
 			nextPanel: this.onNextPanel,
 		};
 
+		// Default styles for the container
 		const defaultStyles: React.CSSProperties = {
 			display: 'grid',
 			position: 'relative',
@@ -70,6 +71,7 @@ export class PanelContainer extends React.Component<Props, State> {
 			perspective: '1200px'
 		};
 
+		// Assign the grid values from props
 		const propStyles: React.CSSProperties = this.assignGridValues();
 		const finalStyles = {
 			...defaultStyles,
@@ -91,6 +93,7 @@ export class PanelContainer extends React.Component<Props, State> {
 		);
 	}
 
+	// Add the passed in grid value props ans construct the template area string correctly
 	assignGridValues = (): React.CSSProperties => {
 		const { columnSizes, rowSizes, templateArea } = this.props.gridProperties;
 		let obj: React.CSSProperties = {

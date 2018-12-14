@@ -90,12 +90,14 @@ export class Panel extends React.Component<Props, {}> {
 		const isEnteringPanel = panelIndex === activeIndex;
 		const directionalClass = this.getDirectionalClassname(isEnteringPanel);
 
+		// If panel is animating, add the directional (fromX/toX etc) classname
 		let animationClasses: string[] = [];
 		if (this.props.isAnimating) {
 			if (isEnteringPanel || isExitingPanel) {
 				animationClasses = [...classes, ...directionalClass, 'isActive'];
 			}
 		}
+		// Once animation has completed, ensure 'isActive' is kept to the new active slide
 		else if (isEnteringPanel) {
 			animationClasses = [...classes, 'isActive'];
 		}
@@ -106,6 +108,7 @@ export class Panel extends React.Component<Props, {}> {
 		return animationClasses;
 	};
 
+	// Return the entering or exiting class based on the animation type
 	getDirectionalClassname = (isEnteringPanel: boolean) => {
 		const { activeIndex, prevActiveIndex } = this.props;
 
