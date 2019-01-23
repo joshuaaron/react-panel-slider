@@ -117,7 +117,11 @@ export class PanelContainer extends React.Component<Props, State> {
 		return obj;
 	};
 
-	// handle animating to previous panel
+		/** 
+	 * Method fired when animating to the previous panel.
+	 * Checks whether panels are currently animating and it's index position.
+	 * to handle when we are at the first panel.
+	 */
 	onPrevPanel = (): void => {
 		if (this.props.panelTotal < 2) {
 			return;
@@ -138,7 +142,11 @@ export class PanelContainer extends React.Component<Props, State> {
 		});
 	};
 
-	// handle animating to next panel
+	/** 
+	 * Method fired when animating to the next panel.
+	 * Checks whether panels are currently animating and it's index position.
+	 * to handle when we are at the final panel.
+	 */
 	onNextPanel = (): void => {
 		if (this.props.panelTotal < 2) {
 			return;
@@ -159,7 +167,7 @@ export class PanelContainer extends React.Component<Props, State> {
 		});
 	};
 
-	/** 
+	/**
 	 * Set isAnimating to false once slides have finished animating
 	 * Since this event fires twice each animation from both panels, we add a check to 
 	 * see if it's already been called once before firing. We can assume now switching between
