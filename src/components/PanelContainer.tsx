@@ -6,6 +6,7 @@ type Props = {
 	panelTotal: number;
 	children?: RenderCallback;
 	render?: RenderCallback;
+	onAnimationEnd?: () => void;
 } & typeof defaultProps;
 
 type RenderCallback = (args: ConsumerProps) => React.ReactNode;
@@ -41,11 +42,13 @@ export class PanelContainer extends React.Component<Props, State> {
 	state = initialState;
 
 	container: React.RefObject<HTMLDivElement> = React.createRef();
+	animationCallbackCount: number = 0;
 
 	shouldComponentUpdate(nextProps: Props, nextState: State) {
+		const { activeIndex, isAnimating } = this.state;
 		return (
-			nextState.activeIndex !== this.state.activeIndex ||
-			nextState.isAnimating !== this.state.isAnimating ||
+			nextState.activeIndex !== activeIndex ||
+			nextState.isAnimating !== isAnimating ||
 			nextProps.panelTotal !== this.props.panelTotal
 		);
 	}
@@ -116,12 +119,12 @@ export class PanelContainer extends React.Component<Props, State> {
 
 	// handle animating to previous panel
 	onPrevPanel = (): void => {
-		if (this.state.isAnimating || this.props.panelTotal < 2) {
+		if (this.props.panelTotal < 2) {
 			return;
 		}
 
 		this.setState(prevState => {
-			if (prevState.activeIndex === 0) {
+			if (prevState.activeIndex === 0 || prevState.isAnimating) {
 				return prevState;
 			}
 			else {
@@ -137,14 +140,15 @@ export class PanelContainer extends React.Component<Props, State> {
 
 	// handle animating to next panel
 	onNextPanel = (): void => {
-		if (this.state.isAnimating || this.props.panelTotal < 2) {
+		if (this.props.panelTotal < 2) {
 			return;
 		}
 
 		this.setState(prevState => {
-			if (prevState.activeIndex === this.props.panelTotal - 1) {
+			if (prevState.activeIndex === this.props.panelTotal - 1 || prevState.isAnimating) {
 				return prevState;
-			} else {
+			}
+			else {
 				return {
 					...prevState,
 					isAnimating: true,
@@ -155,10 +159,25 @@ export class PanelContainer extends React.Component<Props, State> {
 		});
 	};
 
-	/** Set isAnimating to false once slides have finished animating */
+	/** 
+	 * Set isAnimating to false once slides have finished animating
+	 * Since this event fires twice each animation from both panels, we add a check to 
+	 * see if it's already been called once before firing. We can assume now switching between
+	 * the count value of 0 and 1 will suffice.
+	 */
 	handleAnimationEnd = (): void => {
+		const { onAnimationEnd } = this.props;
 		this.setState({
 			isAnimating: false
+		},
+		() => {
+			if (this.animationCallbackCount === 0 && onAnimationEnd) {
+				this.animationCallbackCount++;
+				onAnimationEnd();
+			}
+			else {
+				this.animationCallbackCount = 0;
+			}
 		});
 	};
 

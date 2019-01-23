@@ -16,7 +16,7 @@ const defaultProps = {
 		nextAnimation: AnimationKeys.FROM_RIGHT,
 		prevAnimation: AnimationKeys.FROM_LEFT
 	} as animationTypes,
-	gridAreaValue: 'panel' as string
+	gridAreaValue: 'panel'
 };
 
 export type animationTypes = {

@@ -20,7 +20,11 @@ const gridProps: GridProperties = {
 // PanelContainer allows render={(args =>)} or children as function
 const App = () => (
 	<div className="app">
-		<PanelContainer panelTotal={3} gridProperties={gridProps}>
+		<PanelContainer
+			panelTotal={3}
+			gridProperties={gridProps}
+			onAnimationEnd={handleEnd}
+		>
 			{({ prevPanel, nextPanel, ...props }: ConsumerProps) => (
 				<>
 					{items.map((item: demoItem, index: number) => (
@@ -83,5 +87,7 @@ const items: demoItem[] = [
 		)
 	}
 ];
+
+const handleEnd = () => console.log('Fired end event');
 
 export default App;
