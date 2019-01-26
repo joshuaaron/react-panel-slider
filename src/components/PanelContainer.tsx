@@ -1,26 +1,36 @@
 import * as React from 'react';
 import { isFunction } from '../utils/helpers';
 
-// Declare props & state types
 type Props = {
 	panelTotal: number;
+	defaultActiveIndex?: number;
 	children?: RenderCallback;
 	render?: RenderCallback;
 	onAnimationEnd?: () => void;
 } & typeof defaultProps;
 
-type RenderCallback = (args: ConsumerProps) => React.ReactNode;
-type State = Readonly<typeof initialState>;
+type State = Readonly<{
+	activeIndex: number,
+	prevActiveIndex: number,
+	isAnimating: boolean
+}>;
 
 const defaultProps = {
-	gridProperties: { columnSizes: '1fr', rowSizes: 'auto', templateArea: [''] } as GridProperties
+	gridProperties: { columnSizes: '1fr', rowSizes: 'auto', templateArea: [''] }
 };
 
-const initialState = {
-	prevActiveIndex: 0,
-	activeIndex: 0,
-	isAnimating: false,
-};
+const getInitialState = (props: Props): State => {
+	const { defaultActiveIndex, panelTotal } = props;
+	const indexIsInBounds = defaultActiveIndex && defaultActiveIndex < panelTotal;
+
+	return {
+		prevActiveIndex: (indexIsInBounds && defaultActiveIndex !== 0) ? defaultActiveIndex! - 1 : 0,
+		activeIndex: (indexIsInBounds && defaultActiveIndex) || 0,
+		isAnimating: false,
+	};
+}
+
+type RenderCallback = (args: ConsumerProps) => React.ReactNode;
 
 export type GridProperties = {
 	columnSizes: string;
@@ -39,7 +49,7 @@ export type ConsumerProps = {
 
 export class PanelContainer extends React.Component<Props, State> {
 	static readonly defaultProps = defaultProps;
-	state = initialState;
+	state = getInitialState(this.props);
 
 	container: React.RefObject<HTMLDivElement> = React.createRef();
 	animationCallbackCount: number = 0;

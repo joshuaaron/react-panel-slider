@@ -22,6 +22,7 @@ const App = () => (
 	<div className="app">
 		<PanelContainer
 			panelTotal={3}
+			defaultActiveIndex={2}
 			gridProperties={gridProps}
 			onAnimationEnd={handleEnd}
 		>
