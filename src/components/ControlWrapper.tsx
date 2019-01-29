@@ -5,7 +5,7 @@ import * as React from 'react';
 type Props = {
 	gridAreaValue?: string,
 }
-const ControlWrapper: React.SFC<Props> = ({
+const ControlWrapper: React.FC<Props> = ({
 	gridAreaValue = 'controls',
 	children
 }): React.ReactElement<any> => {

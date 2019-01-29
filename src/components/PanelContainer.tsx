@@ -4,20 +4,17 @@ import { isFunction } from '../utils/helpers';
 type Props = {
 	panelTotal: number;
 	defaultActiveIndex?: number;
+	templateArea?: string[];
 	children?: RenderCallback;
 	render?: RenderCallback;
 	onAnimationEnd?: () => void;
-} & typeof defaultProps;
+};
 
 type State = Readonly<{
 	activeIndex: number,
 	prevActiveIndex: number,
 	isAnimating: boolean
 }>;
-
-const defaultProps = {
-	gridProperties: { columnSizes: '1fr', rowSizes: 'auto', templateArea: [''] }
-};
 
 const getInitialState = (props: Props): State => {
 	const { defaultActiveIndex, panelTotal } = props;
@@ -32,23 +29,16 @@ const getInitialState = (props: Props): State => {
 
 type RenderCallback = (args: ConsumerProps) => React.ReactNode;
 
-export type GridProperties = {
-	columnSizes: string;
-	rowSizes: string;
-	templateArea: string[];
-};
-
 export type ConsumerProps = {
 	activeIndex: State['activeIndex'];
 	prevActiveIndex: State['prevActiveIndex'];
 	isAnimating: State['isAnimating'];
-	prevPanel: PanelContainer['onPrevPanel'];
+	prevPanel: PanelContainer['onPreviousPanel'];
 	nextPanel: PanelContainer['onNextPanel'];
 	handleAnimationEnd: PanelContainer['handleAnimationEnd'];
 };
 
 export class PanelContainer extends React.Component<Props, State> {
-	static readonly defaultProps = defaultProps;
 	state = getInitialState(this.props);
 
 	container: React.RefObject<HTMLDivElement> = React.createRef();
@@ -64,7 +54,7 @@ export class PanelContainer extends React.Component<Props, State> {
 	}
 
 	render() {
-		const { children, render } = this.props;
+		const { children, render, templateArea } = this.props;
 		const { activeIndex, prevActiveIndex, isAnimating } = this.state;
 
 		const renderProps: ConsumerProps = {
@@ -72,7 +62,7 @@ export class PanelContainer extends React.Component<Props, State> {
 			prevActiveIndex,
 			isAnimating,
 			handleAnimationEnd: this.handleAnimationEnd,
-			prevPanel: this.onPrevPanel,
+			prevPanel: this.onPreviousPanel,
 			nextPanel: this.onNextPanel,
 		};
 
@@ -85,7 +75,7 @@ export class PanelContainer extends React.Component<Props, State> {
 		};
 
 		// Assign the grid values from props
-		const propStyles: React.CSSProperties = this.assignGridValues();
+		const propStyles = templateArea && templateArea.length ? this.assignGridValues(templateArea) : {};
 		const finalStyles = {
 			...defaultStyles,
 			...propStyles
@@ -107,24 +97,15 @@ export class PanelContainer extends React.Component<Props, State> {
 	}
 
 	// Add the passed in grid value props ans construct the template area string correctly
-	assignGridValues = (): React.CSSProperties => {
-		const { columnSizes, rowSizes, templateArea } = this.props.gridProperties;
-		let obj: React.CSSProperties = {
-			gridTemplateColumns: columnSizes,
-			gridTemplateRows: rowSizes
-		};
+	assignGridValues = (templateArea: string[]): React.CSSProperties => {
 
 		// For grid-template-areas prop, syntax needs to be "'value' 'value'" etc to be interpreted correctly.
-		if (templateArea && templateArea.length) {
-			let templateString: string = '';
-			templateArea.forEach((val: string) => (templateString += `'${val}' `));
+		let templateString: string = '';
+		templateArea.forEach((val: string) => (templateString += `'${val}' `));
 
-			return {
-				...obj,
-				gridTemplateAreas: `${templateString}`
-			};
-		}
-		return obj;
+		return {
+			gridTemplateAreas: `${templateString}`
+		};
 	};
 
 		/** 
@@ -132,7 +113,7 @@ export class PanelContainer extends React.Component<Props, State> {
 	 * Checks whether panels are currently animating and it's index position.
 	 * to handle when we are at the first panel.
 	 */
-	onPrevPanel = (): void => {
+	onPreviousPanel = (): void => {
 		if (this.props.panelTotal < 2) {
 			return;
 		}

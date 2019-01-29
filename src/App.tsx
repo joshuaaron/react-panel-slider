@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Panel, animationTypes } from './components/Panel'
-import { PanelContainer, ConsumerProps, GridProperties } from './components/PanelContainer';
+import { PanelContainer, ConsumerProps } from './components/PanelContainer';
 import { AnimationKeys } from './utils/animations';
 import { ControlWrapper } from './components/ControlWrapper';
 import './App.css';
@@ -11,19 +11,13 @@ const animationType: animationTypes = {
 	prevAnimation: AnimationKeys.CUBE_TO_RIGHT
 };
 
-const gridProps: GridProperties = {
-	columnSizes: '1fr',
-	rowSizes: 'auto',
-	templateArea: ['panel', 'controls']
-}
-
 // PanelContainer allows render={(args =>)} or children as function
 const App = () => (
 	<div className="app">
 		<PanelContainer
 			panelTotal={3}
-			defaultActiveIndex={2}
-			gridProperties={gridProps}
+			templateArea={['panel', 'controls']}
+			defaultActiveIndex={0}
 			onAnimationEnd={handleEnd}
 		>
 			{({ prevPanel, nextPanel, ...props }: ConsumerProps) => (
