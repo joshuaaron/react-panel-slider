@@ -8,7 +8,7 @@ type Props = {
 	prevActiveIndex: number;
 	isAnimating: boolean;
 	panelClassname?: string | string[];
-	handleAnimationEnd(): void;
+	handleAnimationEnd: () => void;
 } & typeof defaultProps;
 
 const defaultProps = {
