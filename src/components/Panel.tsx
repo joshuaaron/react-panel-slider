@@ -36,7 +36,6 @@ export class Panel extends React.Component<Props, {}> {
 			gridAreaValue,
 			children
 		} = this.props;
-		const isActive = activeIndex === panelIndex;
 
 		const panelStyles: React.CSSProperties = {
 			gridArea: gridAreaValue,
@@ -45,7 +44,7 @@ export class Panel extends React.Component<Props, {}> {
 			transformStyle: 'preserve-3d',
 			backfaceVisibility: 'hidden',
 			willChange: 'transform',
-			zIndex: isActive ? 1 : 0
+			zIndex: activeIndex === panelIndex ? 1 : 0
 		};
 
 		// Assign prop, animation and direction classnames.
