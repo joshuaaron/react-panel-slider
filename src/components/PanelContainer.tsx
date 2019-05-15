@@ -18,7 +18,7 @@ type State = Readonly<{
 
 const getInitialState = (props: Props): State => {
 	const { defaultActiveIndex, panelTotal } = props;
-	const indexIsInBounds = defaultActiveIndex && defaultActiveIndex < panelTotal;
+	const indexIsInBounds = defaultActiveIndex !== undefined && defaultActiveIndex < panelTotal;
 
 	return {
 		prevActiveIndex: (indexIsInBounds && defaultActiveIndex !== 0) ? defaultActiveIndex! - 1 : 0,
@@ -99,7 +99,7 @@ export class PanelContainer extends React.Component<Props, State> {
 	// Add the passed in grid value props ans construct the template area string correctly
 	assignGridValues = (templateArea: string[]): React.CSSProperties => {
 
-		// For grid-template-areas prop, syntax needs to be "'value' 'value'" etc to be interpreted correctly.
+		// For grid-template-areas prop, syntax needs to be "'value' 'value'" to be interpreted correctly.
 		let templateString: string = '';
 		templateArea.forEach((val: string) => (templateString += `'${val}' `));
 
